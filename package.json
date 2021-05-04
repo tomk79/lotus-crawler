@@ -1,0 +1,28 @@
+{
+  "name": "@tomk79/lotusroot-crawler",
+  "version": "0.0.1",
+  "private": false,
+  "description": "",
+  "main": "node/main.js",
+  "scripts": {
+    "test": "mocha --ui tdd ./tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomk79/lotusroot-crawler.git"
+  },
+  "author": "Tomoya Koyanagi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomk79/lotusroot-crawler/issues"
+  },
+  "homepage": "https://github.com/tomk79/lotusroot-crawler#readme",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "iterate79": "^1.1.1",
+    "utils79": "^0.0.5"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}
