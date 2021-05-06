@@ -130,9 +130,28 @@ module.exports = function( main ){
 			type: DataTypes.STRING,
 		},
 
+		// レスポンス Content-type
+		"response_content_type": {
+			type: DataTypes.STRING,
+		},
+
+		// レスポンス ドキュメントフォーマット
+		// リンクを抽出する際のパーサーの選択に使います。
+		// リンクの抽出をしない種類の場合、nullを格納します。
+		// 例: html
+		// 例: css
+		"response_document_format": {
+			type: DataTypes.STRING,
+		},
+
 		// レスポンスステータスコード
 		"response_status": {
 			type: DataTypes.INTEGER,
+		},
+
+		// レスポンスステータスメッセージ
+		"response_status_message": {
+			type: DataTypes.STRING,
 		},
 
 		// レスポンスボディ(base64)
