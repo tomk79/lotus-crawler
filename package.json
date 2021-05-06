@@ -24,6 +24,7 @@
     "fs-extra": "^7.0.1",
     "iterate79": "^1.1.1",
     "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2",
     "utils79": "^0.0.5"
   },
   "devDependencies": {
