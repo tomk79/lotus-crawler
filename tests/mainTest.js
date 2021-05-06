@@ -33,9 +33,18 @@ describe('Crawling', function() {
 		done();
 	});
 
-	it("Adding StartPage", function(done) {
+	it("Adding Target URL", function(done) {
 		this.timeout(60*1000);
-		lotus.add_start_page('http://127.0.0.1:3000/')
+		lotus.add_target_url('http://127.0.0.1:3000/')
+			.then(result => {
+				assert.equal(result, true);
+				done();
+			});
+	});
+
+	it("Crawling", function(done) {
+		this.timeout(60*1000);
+		lotus.crawl()
 			.then(result => {
 				assert.equal(result, true);
 				done();
@@ -56,10 +65,10 @@ describe('Shutting down test server', function() {
 		this.timeout(60*1000);
 		let pathSqliteDb = __dirname + '/../.lotusroot-crawler/database.sqlite';
 		try{
-			if( fsEx.existsSync(pathSqliteDb) ){
-				let result = fsEx.unlinkSync(pathSqliteDb);
-				// console.log('removing database:', result);
-			}
+			// if( fsEx.existsSync(pathSqliteDb) ){
+			// 	let result = fsEx.unlinkSync(pathSqliteDb);
+			// 	// console.log('removing database:', result);
+			// }
 		}catch(e){
 			console.error(e);
 		}

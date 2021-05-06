@@ -38,7 +38,7 @@ module.exports = function( options ){
 	/**
 	 * 探索の開始地点を登録する
 	 */
-	this.add_start_page = async function(url, method, request_options){
+	this.add_target_url = async function(url, method, request_options){
 		if( !url ){
 			return false;
 		}
@@ -60,6 +60,16 @@ module.exports = function( options ){
 			request_options.body
 		);
 		return true;
+	}
+
+
+	/**
+	 * クローリングを開始する
+	 */
+	this.crawl = function( callback ){
+		// データベースの初期化
+		const crawler = new (require('./crawler/crawler.js'))( this, dba );
+		return crawler.start();
 	}
 
 

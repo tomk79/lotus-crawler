@@ -66,6 +66,14 @@ module.exports = function( main ){
 			allowNull: false
 		},
 
+		// ポート番号
+		// 例: 80
+		// 例: 443
+		"port": {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		},
+
 		// パス名
 		// Getパラメータがある場合はそれも含む
 		// 例: /foobar.html
@@ -148,6 +156,7 @@ module.exports = function( main ){
 	CrawlingUrl.sync({
 		alter: true,
 	});
+	this.CrawlingUrl = CrawlingUrl;
 
 
 	/**
@@ -177,11 +186,22 @@ module.exports = function( main ){
 		if( record ){
 			return record.id;
 		}
+
+		let port = 80;
+		if( host.match(/\:([0-9]*)$/) ){
+			port = RegExp.$1;
+		}else if( scheme == 'http' ){
+			port = 80;
+		}else if( scheme == 'https' ){
+			port = 443;
+		}
+
 		let newRecord = await CrawlingUrl.create({
 			"user_id": options.user_id,
 			"project_id": options.project_id,
 			"scheme": scheme,
 			"host": host,
+			"port": port,
 			"path": path,
 			"request_method": method,
 			"request_headers": JSON.stringify(req_headers),
