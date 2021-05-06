@@ -31,7 +31,9 @@ module.exports = function( main ){
 	// データベース接続の初期化
 	console.log('Connect to database...', connectionUri);
 	const sequelize = new Sequelize(connectionUri, {
-		logging: (...msg) => console.log(msg),
+		logging: (...msg) => {
+			// console.log(msg)
+		},
 	});
 
 
@@ -73,13 +75,13 @@ module.exports = function( main ){
 			allowNull: false
 		},
 
-		// リクエストヘッダ
-		"request_header": {
+		// リクエストメソッド
+		"request_method": {
 			type: DataTypes.STRING,
 		},
 
-		// リクエストメソッド
-		"request_method": {
+		// リクエストヘッダ
+		"request_headers": {
 			type: DataTypes.STRING,
 		},
 
@@ -91,8 +93,22 @@ module.exports = function( main ){
 		// 状態
 		// - null = 未取得
 		// - progress = 実行中
-		// - done = 取得済み
+		// - done = 実行済み
 		"status": {
+			type: DataTypes.STRING,
+		},
+
+		// 実行結果
+		// - null = 未取得
+		// - ok = 完了
+		// - errored = エラーが発生
+		// - ignored = 対象範囲外
+		"result": {
+			type: DataTypes.STRING,
+		},
+
+		// エラーメッセージ
+		"error_message": {
 			type: DataTypes.STRING,
 		},
 
@@ -102,7 +118,7 @@ module.exports = function( main ){
 		},
 
 		// レスポンスヘッダ
-		"response_header": {
+		"response_headers": {
 			type: DataTypes.STRING,
 		},
 
@@ -129,6 +145,50 @@ module.exports = function( main ){
 		sequelize,
 		modelName: 'CrawlingUrl',
 	});
-	CrawlingUrl.sync();
+	CrawlingUrl.sync({
+		alter: true,
+	});
+
+
+	/**
+	 * クロール対象URLに関する情報を取得する
+	 */
+	this.get_url_info = async function(scheme, host, path, method){
+		let result = await CrawlingUrl.findAll({
+			where: {
+				scheme: scheme,
+				host: host,
+				path: path,
+				request_method: method,
+			}
+		});
+		// console.log('---------result:', result);
+		if( result && result[0] ){
+			return result[0];
+		}
+		return false;
+	}
+
+	/**
+	 * クロール対象の新しいURLを挿入する
+	 */
+	this.insert_new_url = async function(scheme, host, path, method, req_headers, req_body){
+		let record = await this.get_url_info(scheme, host, path, method);
+		if( record ){
+			return record.id;
+		}
+		let newRecord = await CrawlingUrl.create({
+			"user_id": options.user_id,
+			"project_id": options.project_id,
+			"scheme": scheme,
+			"host": host,
+			"path": path,
+			"request_method": method,
+			"request_headers": JSON.stringify(req_headers),
+			"request_body": req_body,
+		});
+		// console.log('=-=-=-=-=-= inserted:', newRecord.id);
+		return newRecord.id;
+	}
 
 }

@@ -38,7 +38,7 @@ module.exports = function( options ){
 	/**
 	 * 探索の開始地点を登録する
 	 */
-	this.add_start_page = function(url, method, request_options){
+	this.add_start_page = async function(url, method, request_options){
 		if( !url ){
 			return false;
 		}
@@ -46,10 +46,36 @@ module.exports = function( options ){
 			method = 'GET';
 		}
 		request_options = request_options || {};
+		request_options.headers = request_options.headers || {};
+		request_options.body = request_options.body || '';
 
-		console.log('TODO: 未実装...');
+		var parsedUrl = parseUrl(url);
 
+		await dba.insert_new_url(
+			parsedUrl.scheme,
+			parsedUrl.host,
+			parsedUrl.path,
+			method,
+			request_options.headers,
+			request_options.body
+		);
 		return true;
+	}
+
+
+	/**
+	 * URLを解析する
+	 */
+	function parseUrl(url){
+		let rtn = {};
+		var parsedUrl = new URL(url);
+		rtn.scheme = parsedUrl.protocol;
+		rtn.host = parsedUrl.host;
+		rtn.path = parsedUrl.pathname;
+		if( rtn.scheme ){
+			rtn.scheme = rtn.scheme.replace( /\:$/, '');
+		}
+		return rtn;
 	}
 
 }
