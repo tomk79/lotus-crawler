@@ -135,8 +135,8 @@ module.exports = function( main, dba ){
 		}
 		let extractLinks;
 		switch( documentFormat ){
-			case "html": extractLinks = new extractLinks_Html( main ); break;
-			case "css": extractLinks = new extractLinks_Css( main ); break;
+			case "html": extractLinks = new extractLinks_Html( main, dba ); break;
+			case "css": extractLinks = new extractLinks_Css( main, dba ); break;
 		}
 
 		if( !extractLinks ){

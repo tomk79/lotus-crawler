@@ -78,7 +78,7 @@ module.exports = function( options ){
 	 */
 	function parseUrl(url){
 		let rtn = {};
-		var parsedUrl = new URL(url);
+		let parsedUrl = new URL(url);
 		rtn.scheme = parsedUrl.protocol;
 		rtn.host = parsedUrl.host;
 		rtn.path = parsedUrl.pathname;
@@ -86,6 +86,44 @@ module.exports = function( options ){
 			rtn.scheme = rtn.scheme.replace( /\:$/, '');
 		}
 		return rtn;
+	}
+
+	/**
+	 * リンクに指定された文字列をリンク先の完全なURIに変換する
+	 */
+	this.resolveLinkToUri = function( baseUri, linkTo ){
+		if( linkTo.match(/^[a-z0-9]+\:/i) ){
+			// リンク先が完全なURIである場合、加工は必要ない。
+			return linkTo;
+		}
+
+		if( !baseUri.match(/^[a-z0-9]+\:/i) ){
+			// リンク元が完全なURIではない場合、計算できない。
+			console.error('[Error] resolveLinkToUri: Base URL is NOT a URI.');
+			return false;
+		}
+
+		const path = require('path');
+		const parsedUrl_base = new URL(baseUri);
+		// console.log(parsedUrl_base);
+
+		if( linkTo.match(/^\/\//i) ){
+			// `//` で始まる場合
+			return parsedUrl_base.protocol + linkTo;
+
+		}else if( linkTo.match(/^\//i) ){
+			// `/` で始まる場合
+			return parsedUrl_base.origin + linkTo;
+
+		}
+
+		// その他の相対パス
+		let dirname = parsedUrl_base.pathname;
+		if( !parsedUrl_base.pathname.match(/\/$/) ){
+			// スラッシュで閉じられていない
+			dirname = utils79.dirname( parsedUrl_base.pathname );
+		}
+		return parsedUrl_base.origin + path.resolve(dirname, linkTo);
 	}
 
 }

@@ -1,6 +1,7 @@
 const assert = require('assert');
 const fsEx = require('fs-extra');
 const LotusRootCrawler = require(__dirname + '/../node/main.js');
+const lotus = new LotusRootCrawler();
 let serverProc;
 
 describe('Starting test server', function() {
@@ -24,8 +25,78 @@ describe('Starting test server', function() {
 
 });
 
+describe('Functions', function() {
+
+	it("lotus.resolveLinkToUri()", function(done) {
+		this.timeout(60*1000);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/test/b/c.html',
+				'./index.html'
+			),
+			'https://hoge/test/b/index.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/test/b/c.html',
+				'/fin/index.html'
+			),
+			'https://hoge/fin/index.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/test/b/c.html?a=b&c=d',
+				'/fin/index.html'
+			),
+			'https://hoge/fin/index.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/test/b/c.html',
+				'http://foobar/'
+			),
+			'http://foobar/'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/test/b/c.html',
+				'//foobar/'
+			),
+			'https://foobar/'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge:3000/test/b/c.html',
+				'/foobar/'
+			),
+			'https://hoge:3000/foobar/'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge:3000/test/b/c.html',
+				'//foobar:9999/'
+			),
+			'https://foobar:9999/'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge/',
+				'./hoge/fuga.html'
+			),
+			'https://hoge/hoge/fuga.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge',
+				'./hoge/fuga.html'
+			),
+			'https://hoge/hoge/fuga.html'
+		);
+		done();
+	});
+});
+
 describe('Crawling', function() {
-	const lotus = new LotusRootCrawler();
 
 	it("Creating Instance", function(done) {
 		this.timeout(60*1000);
