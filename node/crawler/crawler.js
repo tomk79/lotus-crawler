@@ -1,6 +1,8 @@
 module.exports = function( main, dba ){
 	const it79 = require('iterate79');
 	const Downloader = require('./../downloader/downloader.js');
+	const extractLinks_Html = require('./../extract_links/html.js');
+	const extractLinks_Css = require('./../extract_links/css.js');
 	let currentTargetAry = [];
 
 
@@ -59,12 +61,13 @@ module.exports = function( main, dba ){
 				it79.ary(
 					currentTargetAry,
 					function(itAry1, row, idx){
+						let url = row.scheme+'://'+row.host+row.path;
 
 						const downloader = new Downloader(main);
-						downloader.download(row, function( results ){
+						downloader.download(url, row, function( results ){
 
 							let documentFormat;
-							switch( results.response_content_type ){
+							switch( results.content_type ){
 								case 'text/html':
 									documentFormat = 'html';
 									break;
@@ -87,7 +90,14 @@ module.exports = function( main, dba ){
 								"response_time": results.time,
 							}, {});
 
-							itAry1.next();
+							extract_links(
+								documentFormat,
+								url,
+								results.base64,
+								function(){
+									itAry1.next();
+								}
+							);
 						});
 
 					},
@@ -101,6 +111,37 @@ module.exports = function( main, dba ){
 			}
 		]);
 
+		return;
+	}
+
+
+	/**
+	 * コンテンツからリンクを抽出する
+	 */
+	function extract_links( documentFormat, url, content_base64, callback ){
+		// console.log('extract_links():', documentFormat);
+		if( !documentFormat ){
+			callback();
+			return;
+		}
+		let extractLinks;
+		switch( documentFormat ){
+			case "html": extractLinks = new extractLinks_Html( main ); break;
+			case "css": extractLinks = new extractLinks_Css( main ); break;
+		}
+
+		if( !extractLinks ){
+			callback();
+			return;
+		}
+
+		extractLinks.extract(
+			url,
+			content_base64,
+			function(){
+				callback();
+			}
+		);
 		return;
 	}
 
