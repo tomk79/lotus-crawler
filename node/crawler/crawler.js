@@ -4,8 +4,8 @@ module.exports = function( main, dba ){
 	const it79 = require('iterate79');
 	const utils79 = require('utils79');
 	const Downloader = require('./../downloader/downloader.js');
-	const extractLinks_Html = require('./../extract_links/html.js');
-	const extractLinks_Css = require('./../extract_links/css.js');
+	const ExtractLinks_Html = require('./../extract_links/html.js');
+	const ExtractLinks_Css = require('./../extract_links/css.js');
 	let currentTargetAry = [];
 
 
@@ -135,8 +135,8 @@ module.exports = function( main, dba ){
 		}
 		let extractLinks;
 		switch( documentFormat ){
-			case "html": extractLinks = new extractLinks_Html( main, dba ); break;
-			case "css": extractLinks = new extractLinks_Css( main, dba ); break;
+			case "html": extractLinks = new ExtractLinks_Html( main, dba ); break;
+			case "css": extractLinks = new ExtractLinks_Css( main, dba ); break;
 		}
 
 		if( !extractLinks ){

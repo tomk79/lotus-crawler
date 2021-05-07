@@ -2,6 +2,7 @@ module.exports = function( main, dba ){
 	const cheerio = require('cheerio');
 	const fs = require('fs');
 	const it79 = require('iterate79');
+	const ExtractLinks_Css = require('./css.js');
 
 	/**
 	 * HTMLファイル中のリンクを抽出する
@@ -53,30 +54,54 @@ module.exports = function( main, dba ){
 				// --------------------------------------
 				// style 要素
 				let $styles = $('style');
-				let urlList = [];
+				let srcList = [];
 				$styles.each(function(idx, elm){
 					// console.log( idx, elm.childNodes );
 					elm.childNodes.forEach(function(node, idx2){
-						console.log( idx, idx2, node.data );
-						// TODO: CSSのパーサーを通す
+						// console.log( idx, idx2, node.data );
+						srcList.push( node.data );
 					});
 				});
-				add_target_urls(urlList, function(){
-					it1.next();
-				});
+
+				it79.ary(
+					srcList,
+					function(itAry, srcCss, idx){
+						const extractLinks_Css =  new ExtractLinks_Css(main, dba);
+						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
+							add_target_urls(urlList, function(){
+								itAry.next();
+							});
+						});
+					},
+					function(){
+						it1.next();
+					}
+				);
 			},
 			function(it1){
 				// --------------------------------------
 				// style 属性
 				let $attrStyles = $('[style]');
-				let urlList = [];
+				let srcList = [];
 				$attrStyles.each(function(idx, elm){
-					console.log( idx, elm.attribs.style );
-					// TODO: CSSのパーサーを通す
+					// console.log( idx, elm.attribs.style );
+					srcList.push( elm.attribs.style );
 				});
-				add_target_urls(urlList, function(){
-					it1.next();
-				});
+
+				it79.ary(
+					srcList,
+					function(itAry, srcCss, idx){
+						const extractLinks_Css =  new ExtractLinks_Css(main, dba);
+						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
+							add_target_urls(urlList, function(){
+								itAry.next();
+							});
+						});
+					},
+					function(){
+						it1.next();
+					}
+				);
 			},
 			function(it1){
 				callback();
@@ -99,6 +124,7 @@ module.exports = function( main, dba ){
 					});
 			},
 			function(){
+				// console.log('======= add_target_urls done');
 				callback();
 			}
 		);
