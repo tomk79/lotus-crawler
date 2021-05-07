@@ -87,8 +87,22 @@ describe('Functions', function() {
 		);
 		assert.equal(
 			lotus.resolveLinkToUri(
+				'https://hoge/',
+				'../../../hoge/fuga.html'
+			),
+			'https://hoge/hoge/fuga.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
 				'https://hoge',
 				'./hoge/fuga.html'
+			),
+			'https://hoge/hoge/fuga.html'
+		);
+		assert.equal(
+			lotus.resolveLinkToUri(
+				'https://hoge',
+				'../../../hoge/fuga.html'
 			),
 			'https://hoge/hoge/fuga.html'
 		);

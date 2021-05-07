@@ -3,6 +3,9 @@ module.exports = function( main, dba ){
 	const fs = require('fs');
 	const it79 = require('iterate79');
 
+	/**
+	 * HTMLファイル中のリンクを抽出する
+	 */
 	this.extract = function( url, realpath_file, base64, callback ){
 		// console.log('=-=-=-= extract: HTML', url, realpath_file, base64);
 
@@ -14,28 +17,43 @@ module.exports = function( main, dba ){
 				// --------------------------------------
 				// href 属性
 				let $attrHrefs = $('[href]');
+				let urlList = [];
 				$attrHrefs.each(function(idx, elm){
-					console.log( idx, elm.attribs.href );
+					// console.log( idx, elm.attribs.href );
 					let targetUri = main.resolveLinkToUri( url, elm.attribs.href );
-					console.log(targetUri);
+					// console.log(targetUri);
+					urlList.push({
+						url: targetUri,
+						method: 'GET',
+					});
 				});
-				it1.next();
+				add_target_urls(urlList, function(){
+					it1.next();
+				});
 			},
 			function(it1){
 				// --------------------------------------
 				// src 属性
 				let $attrSrcs = $('[src]');
+				let urlList = [];
 				$attrSrcs.each(function(idx, elm){
-					console.log( idx, elm.attribs.src );
+					// console.log( idx, elm.attribs.src );
 					let targetUri = main.resolveLinkToUri( url, elm.attribs.src );
-					console.log(targetUri);
+					// console.log(targetUri);
+					urlList.push({
+						url: targetUri,
+						method: 'GET',
+					});
 				});
-				it1.next();
+				add_target_urls(urlList, function(){
+					it1.next();
+				});
 			},
 			function(it1){
 				// --------------------------------------
 				// style 要素
 				let $styles = $('style');
+				let urlList = [];
 				$styles.each(function(idx, elm){
 					// console.log( idx, elm.childNodes );
 					elm.childNodes.forEach(function(node, idx2){
@@ -43,22 +61,49 @@ module.exports = function( main, dba ){
 						// TODO: CSSのパーサーを通す
 					});
 				});
-				it1.next();
+				add_target_urls(urlList, function(){
+					it1.next();
+				});
 			},
 			function(it1){
 				// --------------------------------------
 				// style 属性
 				let $attrStyles = $('[style]');
+				let urlList = [];
 				$attrStyles.each(function(idx, elm){
 					console.log( idx, elm.attribs.style );
 					// TODO: CSSのパーサーを通す
 				});
-				it1.next();
+				add_target_urls(urlList, function(){
+					it1.next();
+				});
 			},
 			function(it1){
 				callback();
 			},
 		]);
 	}
+
+
+	/**
+	 * 待機リストに追加する
+	 */
+	function add_target_urls( urls, callback ){
+		it79.ary(
+			urls,
+			function(itAry1, row, idx){
+				// console.log(row);
+				main.add_target_url( row.url, row.method )
+					.then(() => {
+						itAry1.next();
+					});
+			},
+			function(){
+				callback();
+			}
+		);
+		return;
+	}
+
 
 }

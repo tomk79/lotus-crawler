@@ -123,7 +123,7 @@ module.exports = function( options ){
 			// スラッシュで閉じられていない
 			dirname = utils79.dirname( parsedUrl_base.pathname );
 		}
-		return parsedUrl_base.origin + path.resolve(dirname, linkTo);
+		return parsedUrl_base.origin + path.resolve('/', dirname, linkTo);
 	}
 
 }
