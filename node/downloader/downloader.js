@@ -37,7 +37,7 @@ module.exports = function( main ){
 							"status_message": res.statusMessage,
 							"content_type": contentType,
 							"headers": res.headers,
-							"time": (end_time - start_time) * 1000,
+							"time": (end_time - start_time) / 1000,
 						}
 					);
 				});
