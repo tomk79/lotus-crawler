@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/tomk79/lotusroot-crawler#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.9",
     "dateformat": "^4.5.1",
     "fs-extra": "^7.0.1",
     "iterate79": "^1.1.1",
