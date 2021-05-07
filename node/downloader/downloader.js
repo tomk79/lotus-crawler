@@ -36,13 +36,13 @@ module.exports = function( main ){
 
                     callback( {
                         "request_datetime": request_datetime,
-                        "response_status": res.statusCode,
-                        "response_status_message": res.statusMessage,
-                        "response_content_type": contentType,
+                        "status_code": res.statusCode,
+                        "status_message": res.statusMessage,
+                        "content_type": contentType,
                         "size": bin.length,
                         "base64": base64,
-                        "response_headers": res.headers,
-                        "response_time": (end_time - start_time) * 1000,
+                        "headers": res.headers,
+                        "time": (end_time - start_time) * 1000,
                     } );
                 });
         });
