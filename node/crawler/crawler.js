@@ -6,6 +6,7 @@ module.exports = function( main, dba ){
 	const Downloader = require('./../downloader/downloader.js');
 	const ExtractLinks_Html = require('./../extract_links/html.js');
 	const ExtractLinks_Css = require('./../extract_links/css.js');
+	let options = main.get_options();
 	let currentTargetAry = [];
 
 
@@ -33,6 +34,8 @@ module.exports = function( main, dba ){
 					status: 'progress',
 				},{
 					where: {
+						user_id: options.user_id,
+						project_id: options.project_id,
 						status: null,
 					}
 				}).then( () => {
@@ -42,6 +45,8 @@ module.exports = function( main, dba ){
 			function( it1 ){
 				dba.CrawlingUrl.findAll({
 					where: {
+						user_id: options.user_id,
+						project_id: options.project_id,
 						status: 'progress',
 					}
 				}).then( queueList => {

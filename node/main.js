@@ -6,6 +6,8 @@ module.exports = function( options ){
 
 	// options の検査と整形
 	options = options || {};
+	options.user_id = options.user_id || null;
+	options.project_id = options.project_id || null;
 	options.ranges = options.ranges || [];
 	options.ignores = options.ignores || [];
 	options.path_data_dir = options.path_data_dir || '.lotusroot-crawler/';

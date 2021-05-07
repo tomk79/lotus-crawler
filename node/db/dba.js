@@ -184,6 +184,8 @@ module.exports = function( main ){
 	this.get_url_info = async function(scheme, host, path, method){
 		let result = await CrawlingUrl.findAll({
 			where: {
+				user_id: options.user_id,
+				project_id: options.project_id,
 				scheme: scheme,
 				host: host,
 				path: path,
