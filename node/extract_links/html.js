@@ -1,7 +1,7 @@
 module.exports = function( main ){
 
-	this.extract = function( url, base64, callback ){
-		console.log('=-=-=-= extract: HTML', url, base64);
+	this.extract = function( url, realpath_file, base64, callback ){
+		console.log('=-=-=-= extract: HTML', url, realpath_file, base64);
 		callback();
 	}
 

@@ -1,5 +1,8 @@
 module.exports = function( main, dba ){
+	const fs = require('fs');
+	const fsEx = require('fs-extra');
 	const it79 = require('iterate79');
+	const utils79 = require('utils79');
 	const Downloader = require('./../downloader/downloader.js');
 	const extractLinks_Html = require('./../extract_links/html.js');
 	const extractLinks_Css = require('./../extract_links/css.js');
@@ -64,7 +67,10 @@ module.exports = function( main, dba ){
 						let url = row.scheme+'://'+row.host+row.path;
 
 						const downloader = new Downloader(main);
-						downloader.download(url, row, function( results ){
+						downloader.download(url, row, function( realpath_file, results ){
+
+							let bin = fs.readFileSync( realpath_file ).toString();
+							let base64 = utils79.base64_encode(bin);
 
 							let documentFormat;
 							switch( results.content_type ){
@@ -84,8 +90,8 @@ module.exports = function( main, dba ){
 								"request_datetime": results.request_datetime,
 								"response_content_type": results.content_type,
 								"response_document_format": documentFormat,
-								"response_body_base64": results.base64,
-								"response_body_size": results.size,
+								"response_body_base64": base64,
+								"response_body_size": bin.length,
 								"response_headers": JSON.stringify(results.headers),
 								"response_time": results.time,
 							}, {});
@@ -93,8 +99,11 @@ module.exports = function( main, dba ){
 							extract_links(
 								documentFormat,
 								url,
-								results.base64,
+								realpath_file,
+								base64,
 								function(){
+									fs.unlinkSync( realpath_file ); // 一時ファイルの削除
+
 									itAry1.next();
 								}
 							);
@@ -118,7 +127,7 @@ module.exports = function( main, dba ){
 	/**
 	 * コンテンツからリンクを抽出する
 	 */
-	function extract_links( documentFormat, url, content_base64, callback ){
+	function extract_links( documentFormat, url, realpath_file, content_base64, callback ){
 		// console.log('extract_links():', documentFormat);
 		if( !documentFormat ){
 			callback();
@@ -137,6 +146,7 @@ module.exports = function( main, dba ){
 
 		extractLinks.extract(
 			url,
+			realpath_file,
 			content_base64,
 			function(){
 				callback();

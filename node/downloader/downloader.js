@@ -22,27 +22,24 @@ module.exports = function( main ){
 			// console.log('content-length:', res.headers['content-length']);
 
 			request(uri)
-				.pipe(fs.createWriteStream(tmpFilename))
+				.pipe(fs.createWriteStream( tmpFilename ))
 				.on('close', function(){
 
 					let end_time = Date.now();
-					let bin = fs.readFileSync( tmpFilename ).toString();
-					let base64 = utils79.base64_encode(bin);
-					fs.unlinkSync( tmpFilename );
-
 					let contentType = res.headers['content-type'];
 					contentType = contentType.replace( /\;[\s\S]*$/, '' );
 
-					callback( {
-						"request_datetime": request_datetime,
-						"status_code": res.statusCode,
-						"status_message": res.statusMessage,
-						"content_type": contentType,
-						"size": bin.length,
-						"base64": base64,
-						"headers": res.headers,
-						"time": (end_time - start_time) * 1000,
-					} );
+					callback(
+						tmpFilename,
+						{
+							"request_datetime": request_datetime,
+							"status_code": res.statusCode,
+							"status_message": res.statusMessage,
+							"content_type": contentType,
+							"headers": res.headers,
+							"time": (end_time - start_time) * 1000,
+						}
+					);
 				});
 		});
 
