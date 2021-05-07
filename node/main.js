@@ -126,4 +126,32 @@ module.exports = function( options ){
 		return parsedUrl_base.origin + path.resolve('/', dirname, linkTo);
 	}
 
+
+	/**
+	 * URLが探索範囲外か調べる
+	 */
+	this.isUrlIgnored = function( url ){
+		let result = true;
+		for( let idx = 0; idx < options.ranges.length; idx ++ ){
+			if( url.indexOf(options.ranges[idx]) === 0 ){
+				result = false;
+				break;
+			}
+		}
+		if( result ){
+			// ホワイトリストにマッチしなければ対象外
+			return true;
+		}
+
+		result = false;
+		for( let idx = 0; idx < options.ignores.length; idx ++ ){
+			if( url.indexOf(options.ignores[idx]) === 0 ){
+				result = true;
+				break;
+			}
+		}
+
+		return result;
+	}
+
 }

@@ -66,6 +66,16 @@ module.exports = function( main, dba ){
 					function(itAry1, row, idx){
 						let url = row.scheme+'://'+row.host+row.path;
 
+						if( main.isUrlIgnored( url ) ){
+							// 対象外のURL
+							row.update({
+								"status": "done",
+								"result": "ignored",
+							}, {});
+							itAry1.next();
+							return;
+						}
+
 						const downloader = new Downloader(main);
 						downloader.download(url, row, function( realpath_file, results ){
 

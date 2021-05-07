@@ -1,7 +1,13 @@
 const assert = require('assert');
 const fsEx = require('fs-extra');
 const LotusRootCrawler = require(__dirname + '/../node/main.js');
-const lotus = new LotusRootCrawler();
+const lotus = new LotusRootCrawler({
+	ranges: [
+		'http://127.0.0.1:3000/',
+		'http://127.0.0.1:3001/',
+		'http://127.0.0.1:3002/'
+	]
+});
 let serverProc;
 
 describe('Starting test server', function() {
@@ -108,6 +114,20 @@ describe('Functions', function() {
 		);
 		done();
 	});
+
+	it("lotus.isUrlIgnored()", function(done) {
+		this.timeout(60*1000);
+		assert.equal( false, lotus.isUrlIgnored('http://127.0.0.1:3000/') );
+		assert.equal( false, lotus.isUrlIgnored('http://127.0.0.1:3000/hoge/fuga/') );
+		assert.equal( false, lotus.isUrlIgnored('http://127.0.0.1:3001/') );
+		assert.equal( false, lotus.isUrlIgnored('http://127.0.0.1:3001/hoge/fuga/') );
+		assert.equal( true, lotus.isUrlIgnored('https://127.0.0.1:3000/') );
+		assert.equal( true, lotus.isUrlIgnored('https://127.0.0.1:3000/hoge/fuga/') );
+		assert.equal( true, lotus.isUrlIgnored('http://127.0.0.1:3010/') );
+		assert.equal( true, lotus.isUrlIgnored('http://127.0.0.1:3010/hoge/fuga/') );
+		done();
+	});
+
 });
 
 describe('Crawling', function() {
