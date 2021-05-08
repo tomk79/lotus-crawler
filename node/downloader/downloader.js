@@ -30,6 +30,7 @@ module.exports = function( main ){
 							url: uri,
 							method: urlInfo.request_method,
 							headers: request_headers,
+							followRedirect: false,
 						})
 						.on('response', function(response) {
 							args.res = response;
@@ -56,6 +57,7 @@ module.exports = function( main ){
 							url: uri,
 							method: urlInfo.request_method,
 							headers: request_headers,
+							followRedirect: false,
 						})
 						.on('response', function(response) {
 							args.res = response;

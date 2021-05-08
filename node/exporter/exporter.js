@@ -186,6 +186,13 @@ module.exports = function( main ){
 				return;
 			}
 
+			if( urlInfo.response_status >= 300 && urlInfo.response_status <= 399 ){
+				console.error('Redirect.');
+				console.log();
+				rlv();
+				return;
+			}
+
 			let dirname_hostname,
 				newFilePath,
 				parsedUrl;

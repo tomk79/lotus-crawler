@@ -34,6 +34,32 @@ app.get('/dynamic_page', function (req, res) {
 	res.send(resBody);
 })
 
+// リダイレクトするサンプル
+app.get('/redirect/301from', function (req, res) {
+	res.set('Content-Type', 'text/html');
+	res.set('Location', '/redirect/301to.html');
+	res.status(301);
+	res.send('<p>301 Redirect</p>');
+})
+app.get('/redirect/302from', function (req, res) {
+	res.set('Content-Type', 'text/html');
+	res.set('Location', '/redirect/302to.html');
+	res.status(302);
+	res.send('<p>302 Redirect</p>');
+})
+app.get('/redirect/307from', function (req, res) {
+	res.set('Content-Type', 'text/html');
+	res.set('Location', '/redirect/307to.html');
+	res.status(307);
+	res.send('<p>307 Redirect</p>');
+})
+app.get('/redirect/308from', function (req, res) {
+	res.set('Content-Type', 'text/html');
+	res.set('Location', '/redirect/308to.html');
+	res.status(308);
+	res.send('<p>308 Redirect</p>');
+})
+
 // 3000番ポートでLISTEN状態にする
 server.listen( 3000, function(){
 	console.log('server-standby');

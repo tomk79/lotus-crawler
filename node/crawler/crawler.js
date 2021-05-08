@@ -86,7 +86,7 @@ module.exports = function( main ){
 							// GETメソッド以外はリクエストしない
 							row.update({
 								"status": "done",
-								"result": "unsupportee_method",
+								"result": "unsupported_method",
 							}, {});
 							itAry1.next();
 							return;
@@ -129,6 +129,38 @@ module.exports = function( main ){
 								base64,
 								function(){
 									fs.unlinkSync( realpath_file ); // 一時ファイルの削除
+
+									if( results.headers['location'] && ( results.status_code == 301 || results.status_code == 302 || results.status_code == 307 || results.status_code == 308 ) ){
+										let method = row.request_method;
+										let reqOptions = JSON.parse(row.request_headers);
+										if( results.status_code == 301 || results.status_code == 302 ){
+											method = 'GET';
+											if( reqOptions.body ){
+												reqOptions.body = undefined;
+											}
+										}
+										let redirectTo = results.headers['location'];
+										let parsedUrl = new URL(url);
+
+										if( redirectTo.match(/^\/\//) ){
+											// リダイレクト先が、ホスト名以降の場合
+											redirectTo = parsedUrl.protocol + redirectTo;
+										}else if( redirectTo.match(/^\//) ){
+											// リダイレクト先が、パス以降の場合
+											redirectTo = parsedUrl.protocol + '//' + parsedUrl.host + redirectTo;
+										}else if( redirectTo.match(/^[a-zA-Z0-9]+\:/) ){
+											// リダイレクト先が、完全なURIの場合
+										}else{
+											console.error('Redirect Error: Unknown URI pattern:', redirectTo);
+											itAry1.next();
+											return;
+										}
+										main.add_target_url( redirectTo, method, reqOptions )
+											.then(() => {
+												itAry1.next();
+											});
+										return;
+									}
 
 									itAry1.next();
 								}
