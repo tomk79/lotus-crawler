@@ -92,7 +92,7 @@ module.exports = function( options ){
 	/**
 	 * クローリングを開始する
 	 */
-	this.crawl = function( callback ){
+	this.crawl = function(){
 		const crawler = new (require('./crawler/crawler.js'))( this );
 		return crawler.start();
 	}
