@@ -1,4 +1,4 @@
-module.exports = function( main, dba ){
+module.exports = function( main ){
 	const fs = require('fs');
 	const it79 = require('iterate79');
 

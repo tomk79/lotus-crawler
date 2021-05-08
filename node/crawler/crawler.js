@@ -1,4 +1,4 @@
-module.exports = function( main, dba ){
+module.exports = function( main ){
 	const fs = require('fs');
 	const fsEx = require('fs-extra');
 	const it79 = require('iterate79');
@@ -6,6 +6,7 @@ module.exports = function( main, dba ){
 	const Downloader = require('./../downloader/downloader.js');
 	const ExtractLinks_Html = require('./../extract_links/html.js');
 	const ExtractLinks_Css = require('./../extract_links/css.js');
+	const dba = main.dba();
 	let options = main.get_options();
 	let currentTargetAry = [];
 
@@ -30,7 +31,7 @@ module.exports = function( main, dba ){
 
 		it79.fnc({}, [
 			function( it1 ){
-				dba.CrawlingUrl.update({
+				main.dba().CrawlingUrl.update({
 					status: 'progress',
 				},{
 					where: {
@@ -43,7 +44,7 @@ module.exports = function( main, dba ){
 				} );
 			},
 			function( it1 ){
-				dba.CrawlingUrl.findAll({
+				main.dba().CrawlingUrl.findAll({
 					where: {
 						user_id: options.user_id,
 						project_id: options.project_id,
@@ -150,8 +151,8 @@ module.exports = function( main, dba ){
 		}
 		let extractLinks;
 		switch( documentFormat ){
-			case "html": extractLinks = new ExtractLinks_Html( main, dba ); break;
-			case "css": extractLinks = new ExtractLinks_Css( main, dba ); break;
+			case "html": extractLinks = new ExtractLinks_Html( main ); break;
+			case "css": extractLinks = new ExtractLinks_Css( main ); break;
 		}
 
 		if( !extractLinks ){

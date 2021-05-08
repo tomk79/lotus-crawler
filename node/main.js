@@ -34,6 +34,7 @@ module.exports = function( options ){
 
 	// データベースの初期化
 	const dba = new (require('./db/dba.js'))( this );
+	this.dba = function(){ return dba };
 
 
 
@@ -53,7 +54,7 @@ module.exports = function( options ){
 
 		var parsedUrl = parseUrl(url);
 
-		await dba.insert_new_url(
+		await this.dba().insert_new_url(
 			parsedUrl.scheme,
 			parsedUrl.host,
 			parsedUrl.path,
@@ -70,7 +71,7 @@ module.exports = function( options ){
 	 */
 	this.crawl = function( callback ){
 		// データベースの初期化
-		const crawler = new (require('./crawler/crawler.js'))( this, dba );
+		const crawler = new (require('./crawler/crawler.js'))( this );
 		return crawler.start();
 	}
 

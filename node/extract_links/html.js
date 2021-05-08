@@ -1,4 +1,4 @@
-module.exports = function( main, dba ){
+module.exports = function( main ){
 	const cheerio = require('cheerio');
 	const fs = require('fs');
 	const it79 = require('iterate79');
@@ -66,7 +66,7 @@ module.exports = function( main, dba ){
 				it79.ary(
 					srcList,
 					function(itAry, srcCss, idx){
-						const extractLinks_Css =  new ExtractLinks_Css(main, dba);
+						const extractLinks_Css =  new ExtractLinks_Css(main);
 						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
 							add_target_urls(urlList, function(){
 								itAry.next();
@@ -91,7 +91,7 @@ module.exports = function( main, dba ){
 				it79.ary(
 					srcList,
 					function(itAry, srcCss, idx){
-						const extractLinks_Css =  new ExtractLinks_Css(main, dba);
+						const extractLinks_Css =  new ExtractLinks_Css(main);
 						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
 							add_target_urls(urlList, function(){
 								itAry.next();
