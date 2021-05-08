@@ -82,6 +82,16 @@ module.exports = function( main ){
 							return;
 						}
 
+						if( row.request_method !== 'GET' ){
+							// GETメソッド以外はリクエストしない
+							row.update({
+								"status": "done",
+								"result": "unsupportee_method",
+							}, {});
+							itAry1.next();
+							return;
+						}
+
 						const downloader = new Downloader(main);
 						downloader.download(url, row, function( realpath_file, results ){
 

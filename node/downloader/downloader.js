@@ -20,29 +20,65 @@ module.exports = function( main ){
 
 		it79.fnc({}, [
 			function(it1, args){
+				args.res = {};
 
-				request
-					.get({
-						url: uri,
-						method: urlInfo.request_method,
-						headers: request_headers,
-					})
-					.on('response', function(response) {
-						args.res = response;
-					})
-					.on('error', function(err) {
-						console.error(err)
-					})
-					.pipe(fs.createWriteStream( tmpFilename ))
-					.on('close', function(){
+				if( urlInfo.request_method === 'GET' ){
+					// --------------------------------------
+					// GETメソッド
+					request
+						.get({
+							url: uri,
+							method: urlInfo.request_method,
+							headers: request_headers,
+						})
+						.on('response', function(response) {
+							args.res = response;
+						})
+						.on('error', function(err) {
+							console.error(err)
+						})
+						.pipe(fs.createWriteStream( tmpFilename ))
+						.on('close', function(){
 
-						args.end_time = Date.now();
-						args.contentType = args.res.headers['content-type'];
-						args.contentType = args.contentType.replace( /\;[\s\S]*$/, '' );
+							args.end_time = Date.now();
+							args.contentType = args.res.headers['content-type'];
+							args.contentType = args.contentType.replace( /\;[\s\S]*$/, '' );
 
-						it1.next(args);
-					})
-				;
+							it1.next(args);
+						})
+					;
+
+				}else if( urlInfo.request_method === 'POST' ){
+					// --------------------------------------
+					// POSTメソッド
+					request
+						.post({
+							url: uri,
+							method: urlInfo.request_method,
+							headers: request_headers,
+						})
+						.on('response', function(response) {
+							args.res = response;
+						})
+						.on('error', function(err) {
+							console.error(err)
+						})
+						.pipe(fs.createWriteStream( tmpFilename ))
+						.on('close', function(){
+
+							args.end_time = Date.now();
+							args.contentType = args.res.headers['content-type'];
+							args.contentType = args.contentType.replace( /\;[\s\S]*$/, '' );
+
+							it1.next(args);
+						})
+					;
+				}else{
+					// --------------------------------------
+					// サポート外のメソッド
+					console.error('Unsupported method:', urlInfo.request_method);
+					it1.next(args);
+				}
 
 			},
 			function(it1, args){
