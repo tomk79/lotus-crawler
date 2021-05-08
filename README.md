@@ -48,7 +48,8 @@ const lotus = new LotusCrawler({
     // データベース接続情報
     db: {
 		driver: "sqlite",
-		database: "/path/to/your/directory/database.sqlite"
+		database: "/path/to/your/directory/database.sqlite",
+        prefix: "tableNamePrefix",
     }
 
 });
@@ -92,6 +93,10 @@ lotus.export(
 
 
 ## 更新履歴 - Change log
+
+### Lotus Crawler v0.0.2 (リリース日未定)
+
+- オプション `db.prefix` を追加。
 
 ### Lotus Crawler v0.0.1 (2021年5月8日)
 

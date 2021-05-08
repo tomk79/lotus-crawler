@@ -7,7 +7,10 @@ const lotus = new LotusCrawler({
 		'http://127.0.0.1:3000/',
 		'http://127.0.0.1:3001/',
 		'http://127.0.0.1:3002/'
-	]
+	],
+	db: {
+		prefix: 'LotusCrawlerTest',
+	},
 });
 let serverProc;
 
@@ -192,7 +195,7 @@ describe('Shutting down test server', function() {
 		let pathSqliteDb = __dirname + '/../.lotus-crawler/database.sqlite';
 		try{
 			if( fsEx.existsSync(pathSqliteDb) ){
-				let result = fsEx.unlinkSync(pathSqliteDb);
+				// let result = fsEx.unlinkSync(pathSqliteDb);
 				// console.log('removing database:', result);
 			}
 		}catch(e){

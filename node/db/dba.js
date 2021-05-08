@@ -1,6 +1,9 @@
 module.exports = function( main ){
 	const { Sequelize, DataTypes, Model } = require('sequelize');
 	const options = main.get_options();
+	let dba_options = {
+		prefix: (options.db.prefix ? options.db.prefix+'_' : ''),
+	};
 	let connectionUri;
 
 	switch( options.db.driver ){
@@ -41,7 +44,7 @@ module.exports = function( main ){
 
 	// --------------------------------------
 	// Models: Crawling Url
-	const CrawlingUrl = require('./models/CrawlingUrl.js')(main, sequelize, Model, DataTypes);
+	const CrawlingUrl = require('./models/CrawlingUrl.js')(main, dba_options, sequelize, Model, DataTypes);
 	this.CrawlingUrl = CrawlingUrl;
 
 

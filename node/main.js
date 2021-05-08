@@ -23,10 +23,10 @@ module.exports = function( options ){
 	options.path_data_dir = fsEx.realpathSync(options.path_data_dir);
 	options.path_data_dir += options.path_data_dir ? '/' : '';
 
-	options.db = options.db || {
-		"driver": "sqlite",
-		"database": options.path_data_dir + 'database.sqlite'
-	};
+	options.db = options.db || {};
+	options.db.driver = options.db.driver || "sqlite";
+	options.db.database = options.db.database || options.path_data_dir + 'database.sqlite';
+	options.db.prefix = (options.db.prefix ? options.db.prefix : '');
 	this.get_options = function(){
 		return options;
 	}

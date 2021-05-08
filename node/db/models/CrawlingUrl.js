@@ -1,6 +1,7 @@
 // --------------------------------------
 // Models: Crawling Url
-module.exports = function( main, sequelize, Model, DataTypes ){
+module.exports = function( main, dba_options, sequelize, Model, DataTypes ){
+	const options = main.get_options();
 
 	class CrawlingUrl extends Model {}
 
@@ -134,10 +135,11 @@ module.exports = function( main, sequelize, Model, DataTypes ){
 		},
 	}, {
 		sequelize,
-		modelName: 'CrawlingUrl',
+		modelName: dba_options.prefix + 'CrawlingUrl',
 	});
 	CrawlingUrl.sync({
 		alter: true,
 	});
 	return CrawlingUrl;
+
 }
