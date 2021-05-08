@@ -85,8 +85,8 @@ module.exports = function( main ){
 						const downloader = new Downloader(main);
 						downloader.download(url, row, function( realpath_file, results ){
 
-							let bin = fs.readFileSync( realpath_file ).toString();
-							let base64 = utils79.base64_encode(bin);
+							let bin = fs.readFileSync( realpath_file, {} );
+							let base64 = (new Buffer(bin)).toString('base64');
 
 							let documentFormat;
 							switch( results.content_type ){

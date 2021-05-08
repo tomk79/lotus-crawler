@@ -212,12 +212,13 @@ module.exports = function( main ){
 					let dirname = newFilePath.replace(/\/[^\/]*$/, '/');
 					fsEx.mkdirpSync(_this.path_export_to + dirname);
 
-					fsEx.writeFileSync( _this.path_export_to + newFilePath, utils79.base64_decode(urlInfo.response_body_base64) );
+
+					let bin = (new Buffer(urlInfo.response_body_base64, 'base64'));
+					fs.writeFileSync( _this.path_export_to + newFilePath, bin, {} );
 
 					it1.next();
 				},
 				function(){
-					console.error('TODO: ファイル毎の出力処理は未実装');
 					console.log();
 					rlv();
 				}
