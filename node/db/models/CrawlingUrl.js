@@ -6,6 +6,14 @@ module.exports = function( main, dba_options, sequelize, Model, DataTypes ){
 	class CrawlingUrl extends Model {}
 
 	CrawlingUrl.init({
+		// ID
+		"id": {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true,
+		},
+
 		// 使用者識別情報
 		"user_id": {
 			type: DataTypes.STRING,

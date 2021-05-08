@@ -97,6 +97,7 @@ lotus.export(
 ### Lotus Crawler v0.0.2 (リリース日未定)
 
 - オプション `db.prefix` を追加。
+- データベーステーブルの `id` カラム型を UUID に変更。
 
 ### Lotus Crawler v0.0.1 (2021年5月8日)
 
