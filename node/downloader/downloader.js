@@ -1,5 +1,6 @@
 module.exports = function( main ){
 	const options = main.get_options();
+	const it79 = require('iterate79');
 	const utils79 = require('utils79');
 	const fs = require('fs');
 	const fsEx = require('fs-extra');
@@ -14,34 +15,50 @@ module.exports = function( main ){
 
 		let start_time = Date.now();
 		let request_datetime = dateformat(new Date(), 'isoDateTime');
+		let request_headers = JSON.parse(urlInfo.request_headers);
 
 
-		request.head(uri, function(err, res, body){
-			// console.log(err, res, body);
-			// console.log('content-type:', res.headers['content-type']);
-			// console.log('content-length:', res.headers['content-length']);
+		it79.fnc({}, [
+			function(it1, args){
 
-			request(uri)
-				.pipe(fs.createWriteStream( tmpFilename ))
-				.on('close', function(){
+				request
+					.get({
+						url: uri,
+						method: urlInfo.request_method,
+						headers: request_headers,
+					})
+					.on('response', function(response) {
+						args.res = response;
+					})
+					.on('error', function(err) {
+						console.error(err)
+					})
+					.pipe(fs.createWriteStream( tmpFilename ))
+					.on('close', function(){
 
-					let end_time = Date.now();
-					let contentType = res.headers['content-type'];
-					contentType = contentType.replace( /\;[\s\S]*$/, '' );
+						args.end_time = Date.now();
+						args.contentType = args.res.headers['content-type'];
+						args.contentType = args.contentType.replace( /\;[\s\S]*$/, '' );
 
-					callback(
-						tmpFilename,
-						{
-							"request_datetime": request_datetime,
-							"status_code": res.statusCode,
-							"status_message": res.statusMessage,
-							"content_type": contentType,
-							"headers": res.headers,
-							"time": (end_time - start_time) / 1000,
-						}
-					);
-				});
-		});
+						it1.next(args);
+					})
+				;
+
+			},
+			function(it1, args){
+				callback(
+					tmpFilename,
+					{
+						"request_datetime": request_datetime,
+						"status_code": args.res.statusCode,
+						"status_message": args.res.statusMessage,
+						"content_type": args.contentType,
+						"headers": args.res.headers,
+						"time": (args.end_time - start_time) / 1000,
+					}
+				);
+			}
+		]);
 
 	}
 }

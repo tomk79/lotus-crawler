@@ -15,7 +15,23 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+
+// 静的なファイル群
 app.use( express.static( __dirname+'/../vhosts/localhost_3000/' ) );
+
+// 動的なレスポンスを返すサンプル
+app.get('/dynamic_page', function (req, res) {
+	let resBody = '';
+	resBody += '<!DOCTYPE html>'+"\n";
+	resBody += '<html>'+"\n";
+	resBody += '<body>'+"\n";
+	resBody += '<p>UserAgent: <code>'+req.headers['user-agent']+'</code></p>'+"\n";
+	resBody += '</body>'+"\n";
+	resBody += '</html>'+"\n";
+	res.set('Content-Type', 'text/html');
+	res.status(200);
+	res.send(resBody);
+})
 
 // 3000番ポートでLISTEN状態にする
 server.listen( 3000, function(){

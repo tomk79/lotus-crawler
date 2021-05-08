@@ -1,7 +1,8 @@
 const assert = require('assert');
 const fsEx = require('fs-extra');
-const LotusRootCrawler = require(__dirname + '/../node/main.js');
-const lotus = new LotusRootCrawler({
+const LotusCrawler = require(__dirname + '/../node/main.js');
+const lotus = new LotusCrawler({
+	user_agent: 'Mozilla/5.0 Test Agent',
 	ranges: [
 		'http://127.0.0.1:3000/',
 		'http://127.0.0.1:3001/',
@@ -188,7 +189,7 @@ describe('Shutting down test server', function() {
 
 	it("(Remove SQLite database)", function(done) {
 		this.timeout(60*1000);
-		let pathSqliteDb = __dirname + '/../.lotusroot-crawler/database.sqlite';
+		let pathSqliteDb = __dirname + '/../.lotus-crawler/database.sqlite';
 		try{
 			if( fsEx.existsSync(pathSqliteDb) ){
 				let result = fsEx.unlinkSync(pathSqliteDb);

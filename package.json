@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tomk79/lotusroot-crawler.git"
+    "url": "git+https://github.com/tomk79/lotus-crawler.git"
   },
   "author": "Tomoya Koyanagi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tomk79/lotusroot-crawler/issues"
+    "url": "https://github.com/tomk79/lotus-crawler/issues"
   },
-  "homepage": "https://github.com/tomk79/lotusroot-crawler#readme",
+  "homepage": "https://github.com/tomk79/lotus-crawler#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.9",
     "dateformat": "^4.5.1",

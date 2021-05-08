@@ -8,9 +8,10 @@ module.exports = function( options ){
 	options = options || {};
 	options.user_id = options.user_id || null;
 	options.project_id = options.project_id || null;
+	options.user_agent = options.user_agent || '';
 	options.ranges = options.ranges || [];
 	options.ignores = options.ignores || [];
-	options.path_data_dir = options.path_data_dir || '.lotusroot-crawler/';
+	options.path_data_dir = options.path_data_dir || '.lotus-crawler/';
 
 	// データディレクトリの初期化
 	if( !fsEx.existsSync(options.path_data_dir) ){
@@ -67,6 +68,8 @@ module.exports = function( options ){
 		}
 		request_options = request_options || {};
 		request_options.headers = request_options.headers || {};
+		request_options.headers["user-agent"] = options.user_agent;
+
 		request_options.body = request_options.body || '';
 
 		var parsedUrl = parseUrl(url);
