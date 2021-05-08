@@ -28,7 +28,7 @@ module.exports = function( main ){
 						method: 'GET',
 					});
 				});
-				add_target_urls(urlList, function(){
+				add_target_urls(urlList, url, function(){
 					it1.next();
 				});
 			},
@@ -46,7 +46,7 @@ module.exports = function( main ){
 						method: 'GET',
 					});
 				});
-				add_target_urls(urlList, function(){
+				add_target_urls(urlList, url, function(){
 					it1.next();
 				});
 			},
@@ -68,7 +68,7 @@ module.exports = function( main ){
 					function(itAry, srcCss, idx){
 						const extractLinks_Css =  new ExtractLinks_Css(main);
 						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
-							add_target_urls(urlList, function(){
+							add_target_urls(urlList, url, function(){
 								itAry.next();
 							});
 						});
@@ -93,7 +93,7 @@ module.exports = function( main ){
 					function(itAry, srcCss, idx){
 						const extractLinks_Css =  new ExtractLinks_Css(main);
 						extractLinks_Css.parseCssFile(url, srcCss, function(urlList){
-							add_target_urls(urlList, function(){
+							add_target_urls(urlList, url, function(){
 								itAry.next();
 							});
 						});
@@ -113,12 +113,17 @@ module.exports = function( main ){
 	/**
 	 * 待機リストに追加する
 	 */
-	function add_target_urls( urls, callback ){
+	function add_target_urls( urls, baseUrl, callback ){
+		let request_options = {
+			"headers": {}
+		};
+		request_options.headers['referer'] = baseUrl;
+
 		it79.ary(
 			urls,
 			function(itAry1, row, idx){
 				// console.log(row);
-				main.add_target_url( row.url, row.method )
+				main.add_target_url( row.url, row.method, request_options )
 					.then(() => {
 						itAry1.next();
 					});

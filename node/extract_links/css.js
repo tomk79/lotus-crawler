@@ -9,13 +9,17 @@ module.exports = function( main ){
 		// console.log('=-=-=-= extract: CSS', url, realpath_file, base64);
 
 		let bin = fs.readFileSync( realpath_file ).toString();
+		let request_options = {
+			"headers": {}
+		};
+		request_options.headers['referer'] = url;
 
 		this.parseCssFile(url, bin, function(urls){
 			it79.ary(
 				urls,
 				function(itAry1, row, idx){
 					// console.log(row);
-					main.add_target_url( row.url, row.method )
+					main.add_target_url( row.url, row.method, request_options )
 						.then(() => {
 							itAry1.next();
 						});

@@ -26,6 +26,7 @@ app.get('/dynamic_page', function (req, res) {
 	resBody += '<html>'+"\n";
 	resBody += '<body>'+"\n";
 	resBody += '<p>UserAgent: <code>'+req.headers['user-agent']+'</code></p>'+"\n";
+	resBody += '<p>Referer: <code>'+req.headers['referer']+'</code></p>'+"\n";
 	resBody += '</body>'+"\n";
 	resBody += '</html>'+"\n";
 	res.set('Content-Type', 'text/html');

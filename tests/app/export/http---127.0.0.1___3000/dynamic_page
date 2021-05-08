@@ -2,5 +2,6 @@
 <html>
 <body>
 <p>UserAgent: <code>Mozilla/5.0 Test Agent</code></p>
+<p>Referer: <code>http://127.0.0.1:3000/</code></p>
 </body>
 </html>

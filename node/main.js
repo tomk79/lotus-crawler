@@ -66,9 +66,12 @@ module.exports = function( options ){
 		if( !method ){
 			method = 'GET';
 		}
+		method = method.toUpperCase();
+		let headers = {};
+		headers["user-agent"] = options.user_agent;
 		request_options = request_options || {};
 		request_options.headers = request_options.headers || {};
-		request_options.headers["user-agent"] = options.user_agent;
+		request_options.headers = Object.assign(request_options.headers, headers);
 
 		request_options.body = request_options.body || '';
 
