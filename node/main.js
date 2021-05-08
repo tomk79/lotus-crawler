@@ -43,9 +43,10 @@ module.exports = function( options ){
 	function parseUrl(url){
 		let rtn = {};
 		let parsedUrl = new URL(url);
+
 		rtn.scheme = parsedUrl.protocol;
 		rtn.host = parsedUrl.host;
-		rtn.path = parsedUrl.pathname;
+		rtn.path = parsedUrl.pathname + parsedUrl.search;
 		if( rtn.scheme ){
 			rtn.scheme = rtn.scheme.replace( /\:$/, '');
 		}

@@ -1,6 +1,6 @@
 module.exports = function( main ){
 	const { Sequelize, DataTypes, Model } = require('sequelize');
-	let options = main.get_options();
+	const options = main.get_options();
 	let connectionUri;
 
 	switch( options.db.driver ){
@@ -35,6 +35,7 @@ module.exports = function( main ){
 			// console.log(msg)
 		},
 	});
+	this.sequelize = sequelize;
 
 
 	// --------------------------------------

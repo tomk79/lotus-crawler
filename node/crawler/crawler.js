@@ -7,7 +7,7 @@ module.exports = function( main ){
 	const ExtractLinks_Html = require('./../extract_links/html.js');
 	const ExtractLinks_Css = require('./../extract_links/css.js');
 	const dba = main.dba();
-	let options = main.get_options();
+	const options = main.get_options();
 	let currentTargetAry = [];
 
 
