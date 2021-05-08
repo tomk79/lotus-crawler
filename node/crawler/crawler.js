@@ -17,7 +17,7 @@ module.exports = function( main ){
 	this.start = function(){
 		return new Promise( (rlv, rjt) => {
 			crawlingLoop( function(){
-				rlv( true );
+				rlv();
 			} );
 		});
 	}

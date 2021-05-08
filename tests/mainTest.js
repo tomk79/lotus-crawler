@@ -150,11 +150,31 @@ describe('Crawling', function() {
 	it("Crawling", function(done) {
 		this.timeout(60*1000);
 		lotus.crawl()
-			.then(result => {
-				assert.equal(result, true);
+			.then(() => {
+				done();
+			})
+			.catch((message) => {
+				console.error(message);
 				done();
 			});
 	});
+});
+
+describe('Exporting', function() {
+
+	it("Crawling", function(done) {
+		this.timeout(60*1000);
+		lotus.export(__dirname + '/app/export/', {
+		})
+			.then(() => {
+				done();
+			})
+			.catch((message) => {
+				console.error(message);
+				done();
+			});
+	});
+
 });
 
 describe('Shutting down test server', function() {

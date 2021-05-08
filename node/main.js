@@ -37,6 +37,22 @@ module.exports = function( options ){
 	this.dba = function(){ return dba };
 
 
+	/**
+	 * URLを解析する
+	 */
+	function parseUrl(url){
+		let rtn = {};
+		let parsedUrl = new URL(url);
+		rtn.scheme = parsedUrl.protocol;
+		rtn.host = parsedUrl.host;
+		rtn.path = parsedUrl.pathname;
+		if( rtn.scheme ){
+			rtn.scheme = rtn.scheme.replace( /\:$/, '');
+		}
+		return rtn;
+	}
+
+
 
 	/**
 	 * 探索の開始地点を登録する
@@ -70,26 +86,21 @@ module.exports = function( options ){
 	 * クローリングを開始する
 	 */
 	this.crawl = function( callback ){
-		// データベースの初期化
 		const crawler = new (require('./crawler/crawler.js'))( this );
 		return crawler.start();
 	}
 
 
 	/**
-	 * URLを解析する
+	 * 収集したデータをファイルに出力する
 	 */
-	function parseUrl(url){
-		let rtn = {};
-		let parsedUrl = new URL(url);
-		rtn.scheme = parsedUrl.protocol;
-		rtn.host = parsedUrl.host;
-		rtn.path = parsedUrl.pathname;
-		if( rtn.scheme ){
-			rtn.scheme = rtn.scheme.replace( /\:$/, '');
-		}
-		return rtn;
+	this.export = function( path_export_to, export_options ){
+		export_options = export_options || {};
+
+		const exporter = new (require('./exporter/exporter.js'))( this );
+		return exporter.start( path_export_to, export_options );
 	}
+
 
 	/**
 	 * リンクに指定された文字列をリンク先の完全なURIに変換する
