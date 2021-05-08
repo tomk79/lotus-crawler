@@ -2,7 +2,7 @@
   "name": "@tomk79/lotus-crawler",
   "version": "0.0.1",
   "private": false,
-  "description": "",
+  "description": "Lotus Crawler は、ウェブサイトを巡回し、コンテンツをデータベースに記録するクローリングツールです。",
   "main": "node/main.js",
   "scripts": {
     "start": "node ./tests/app/server/server.js;",

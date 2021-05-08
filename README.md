@@ -93,7 +93,7 @@ lotus.export(
 
 ## 更新履歴 - Change log
 
-### Lotus Crawler v0.0.1 (リリース日未定)
+### Lotus Crawler v0.0.1 (2021年5月8日)
 
 - Initial Release.
 
