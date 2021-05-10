@@ -151,7 +151,7 @@ describe('Crawling', function() {
 			});
 	});
 
-	it("Crawling", function(done) {
+	it("Crawl", function(done) {
 		this.timeout(60*1000);
 		lotus.crawl()
 			.then(() => {
@@ -166,7 +166,7 @@ describe('Crawling', function() {
 
 describe('Exporting', function() {
 
-	it("Crawling", function(done) {
+	it("Export", function(done) {
 		this.timeout(60*1000);
 		lotus.export(__dirname + '/app/export/', {
 		})
