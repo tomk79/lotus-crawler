@@ -115,7 +115,7 @@ lotus.each( (urlInfo, next) => {
 
 ## 更新履歴 - Change log
 
-### Lotus Crawler v0.1.0 (リリース日未定)
+### Lotus Crawler v0.1.0 (2021年5月10日)
 
 - オプション `db.prefix` を追加。
 - データベーステーブルの `id` カラム型を UUID に変更。
