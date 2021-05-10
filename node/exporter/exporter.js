@@ -62,38 +62,23 @@ module.exports = function( main ){
 
 		it79.fnc({}, [
 			function( it1 ){
-				get_count().then((result) => {
+				main.count().then((result) => {
 					console.log('Total count:', result);
 					count = result;
 					it1.next();
 				});
 			},
 			function( it1 ){
-				get_list().then((result) => {
-					// console.log('List:', result);
-					list = result;
-					it1.next();
-				});
-			},
-			function( it1 ){
-				it79.ary(
-					list,
-					function(itAry, row, idx){
-						get_one(row.id)
-							.then( (uriInfo) => {
-								// console.log(uriInfo);
-
-								export_one(uriInfo)
-									.then( () => {
-										itAry.next();
-									} );
-
-							} );
-					},
-					function(){
+				main.each( function( uriInfo, next ){
+					export_one(uriInfo)
+						.then( () => {
+							next();
+						} )
+					;
+				} )
+					.then( () => {
 						it1.next();
-					}
-				);
+					} );
 			},
 			function( it1 ){
 				callback();
@@ -102,60 +87,6 @@ module.exports = function( main ){
 
 	}
 
-
-	/**
-	 * 対象の総件数を取得する
-	 */
-	async function get_count(){
-		const sequelize = main.dba().sequelize;
-
-		var result = await main.dba().CrawlingUrl.count({
-			where: {
-				user_id: options.user_id,
-				project_id: options.project_id,
-			}
-		});
-		return result;
-	}
-
-	/**
-	 * 対象を取得する
-	 */
-	async function get_list(){
-		const sequelize = main.dba().sequelize;
-
-		var result = await main.dba().CrawlingUrl.findAll({
-			attributes: [
-				// カラムには、base64などが含まれ、かなりの大容量になる。
-				// 一覧にそれを含むには大きすぎるので、取得するカラムを絞る。
-				'id',
-				'host',
-				'path',
-				'request_method'
-			],
-			where: {
-				user_id: options.user_id,
-				project_id: options.project_id,
-			}
-		});
-		return result;
-	}
-
-	/**
-	 * 対象を取得する
-	 */
-	async function get_one(id){
-		const sequelize = main.dba().sequelize;
-
-		var result = await main.dba().CrawlingUrl.findOne({
-			where: {
-				id: id,
-				user_id: options.user_id,
-				project_id: options.project_id,
-			}
-		});
-		return result;
-	}
 
 	/**
 	 * ファイル1件毎の出力処理

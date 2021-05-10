@@ -195,7 +195,7 @@ describe('Shutting down test server', function() {
 		let pathSqliteDb = __dirname + '/../.lotus-crawler/database.sqlite';
 		try{
 			if( fsEx.existsSync(pathSqliteDb) ){
-				// let result = fsEx.unlinkSync(pathSqliteDb);
+				let result = fsEx.unlinkSync(pathSqliteDb);
 				// console.log('removing database:', result);
 			}
 		}catch(e){

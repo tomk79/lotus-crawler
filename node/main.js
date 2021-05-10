@@ -1,6 +1,6 @@
 module.exports = function( options ){
 	const utils79 = require('utils79');
-	const iterate79 = require('iterate79');
+	const it79 = require('iterate79');
 	const fsEx = require('fs-extra');
 
 
@@ -106,6 +106,77 @@ module.exports = function( options ){
 
 		const exporter = new (require('./exporter/exporter.js'))( this );
 		return exporter.start( path_export_to, export_options );
+	}
+
+
+	/**
+	 * レコード総数を取得する
+	 */
+	this.count = function(){
+		return this.dba().CrawlingUrl.count({
+			where: {
+				user_id: options.user_id,
+				project_id: options.project_id,
+			}
+		});
+	}
+
+
+	/**
+	 * each
+	 */
+	this.each = function( eachFnc ){
+		const main = this;
+
+		return new Promise( (rlv, rjt) => {
+			let targetList;
+			it79.fnc({}, [
+				function(it1){
+					main.dba().CrawlingUrl.findAll({
+						attributes: [
+							// カラムには、base64などが含まれ、かなりの大容量になる。
+							// 一覧にそれを含むには大きすぎるので、取得するカラムを絞る。
+							'id',
+							'host',
+							'path',
+							'request_method'
+						],
+						where: {
+							user_id: options.user_id,
+							project_id: options.project_id,
+						}
+					}).then( (result) => {
+						targetList = result;
+						it1.next();
+					} );
+				},
+				function(it1){
+					it79.ary(
+						targetList,
+						function(itAry, row){
+
+							main.dba().CrawlingUrl.findOne({
+								where: {
+									id: row.id,
+									user_id: options.user_id,
+									project_id: options.project_id,
+								}
+							}).then( (urlInfo) => {
+								eachFnc(urlInfo, function(){
+									itAry.next();
+								});
+							} );
+						},
+						function(){
+							it1.next();
+						}
+					);
+				},
+				function(){
+					rlv();
+				}
+			]);
+		} );
 	}
 
 
