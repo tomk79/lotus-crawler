@@ -30,7 +30,7 @@ describe('Starting test server', function() {
 		});
 		setTimeout(function(){
 			done();
-		}, 1000);
+		}, 5000);
 	});
 
 });

@@ -15,7 +15,6 @@ environment:
   oauthtoken:
     secure: L7aFaHhJkScePf7T8vMrHn3xtwObmwfSjy36tXMOpb7qY8LXpSeieA6xx1oKiBk9
   matrix:
-    - nodejs_version: "14.16"
     - nodejs_version: "13"
     - nodejs_version: "12"
     - nodejs_version: "11"
