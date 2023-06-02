@@ -115,6 +115,10 @@ lotus.each( (urlInfo, next) => {
 
 ## 更新履歴 - Change log
 
+### Lotus Crawler v0.1.1 (リリース日未定)
+
+- NodeJS および 依存パッケージの更新 に関する修正。
+
 ### Lotus Crawler v0.1.0 (2021年5月10日)
 
 - オプション `db.prefix` を追加。

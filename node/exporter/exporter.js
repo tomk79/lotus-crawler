@@ -151,7 +151,7 @@ module.exports = function( main ){
 					fsEx.mkdirpSync(_this.path_export_to + dirname);
 
 
-					let bin = (new Buffer(urlInfo.response_body_base64, 'base64'));
+					let bin = (Buffer.from(urlInfo.response_body_base64, 'base64'));
 					fs.writeFileSync( _this.path_export_to + newFilePath, bin, {} );
 
 					it1.next();

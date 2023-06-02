@@ -9,7 +9,6 @@ const express = require('express'),
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
 
-app.use( bodyParser({"limit": "1024mb"}) );
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
